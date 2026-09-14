@@ -1,54 +1,68 @@
 import { Link } from "react-router-dom";
+import { COMPANY, ROUTES, SERVICES } from "../data/site";
 
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="footer-grid">
-        <div>
-          <Link to="/" className="footer-brand">
-            <img src="/portrait.png" alt="Zedera logo" />
-            <span>Zedera</span>
-          </Link>
+      <div className="wrap">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <Link to="/" className="brand">
+              <img src="/logo-mark.svg" alt="" aria-hidden="true" />
+              <span className="brand-text">
+                <span className="brand-name">{COMPANY.name}</span>
+                <span className="brand-sub">{COMPANY.tagline}</span>
+              </span>
+            </Link>
+            <p className="footer-desc">{COMPANY.description}</p>
+          </div>
 
-          <p className="footer-text">
-            We build websites, platforms, AI tools, and digital systems for
-            businesses that want to grow online.
-          </p>
+          <div className="footer-col">
+            <div className="footer-col-head">Company</div>
+            <Link to="/">Home</Link>
+            {ROUTES.map((r) => (
+              <Link key={r.href} to={r.href}>
+                {r.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="footer-col">
+            <div className="footer-col-head">Capabilities</div>
+            {SERVICES.map((s) => (
+              <Link key={s.id} to="/services">
+                {s.title}
+              </Link>
+            ))}
+          </div>
+
+          <div className="footer-col">
+            <div className="footer-col-head">Contact</div>
+            <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+            {COMPANY.phones.map((p) => (
+              <a key={p} href={`tel:${p}`}>
+                {p}
+              </a>
+            ))}
+            {COMPANY.addressLines.map((line) => (
+              <span key={line}>{line}</span>
+            ))}
+            <a href={COMPANY.url}>{`www.${COMPANY.domain}`}</a>
+          </div>
         </div>
 
-        <div>
-          <h4>Company</h4>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/services">Services</Link>
-          <Link to="/work">Work</Link>
-          <Link to="/contact">Contact</Link>
+        <div className="footer-mark serif" aria-hidden="true">
+          {COMPANY.name.toUpperCase()}
         </div>
 
-        <div>
-          <h4>Services</h4>
-          <p>Web & App Development</p>
-          <p>AI Tools & Automation</p>
-          <p>Digital Marketing</p>
-          <p>UI / UX Design</p>
-          <p>Platform Consulting</p>
+        <div className="footer-bottom">
+          <span>
+            © {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved.
+          </span>
+          <span className="mono" style={{ letterSpacing: "0.1em" }}>
+            Addis Ababa · East Africa
+          </span>
         </div>
-
-        <div>
-          <h4>Contact</h4>
-          <p>Sherifa Building / 11th Floor</p>
-          <p>0984951144</p>
-          <p>0921319769</p>
-          <p>zederaet@gmail.com</p>
-          <p>www.zederaet.com</p>
-        </div>
-      </div>
-
-      <div className="footer-bottom">
-        <p>
-          © {new Date().getFullYear()} Zedera Tech Solutions. All rights
-          reserved.
-        </p>
       </div>
     </footer>
   );

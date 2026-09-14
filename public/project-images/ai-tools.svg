@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320">
+  <defs>
+    <linearGradient id="bg-ai-tools" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1C478B"/>
+      <stop offset="100%" stop-color="#1E566C"/>
+    </linearGradient>
+    <radialGradient id="glow-ai-tools" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="480" height="320" fill="url(#bg-ai-tools)"/>
+  
+  <g transform="translate(-40,190) scale(1.4)" opacity="0.14">
+    <polygon points="0,0 100,0 0,100" fill="#67C8B7" />
+    <polygon points="100,0 100,100 0,100" fill="#89B8CA" />
+    <rect x="0" y="100" width="60" height="60" fill="#89B8CA" />
+  </g>
+  <circle cx="240.0" cy="152.0" r="118" fill="url(#glow-ai-tools)"/>
+  
+  <g transform="translate(150,64)">
+    <line x1="90" y1="66" x2="26" y2="20" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <line x1="90" y1="66" x2="154" y2="20" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <line x1="90" y1="66" x2="26" y2="120" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <line x1="90" y1="66" x2="154" y2="120" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <line x1="90" y1="66" x2="90" y2="132" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="90" cy="66" r="22" stroke="#F4FAFB" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="90" cy="66" r="7" fill="#F4FAFB"/>
+    <circle cx="26" cy="20" r="10" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="154" cy="20" r="10" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="26" cy="120" r="10" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="154" cy="120" r="10" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="90" cy="132" r="10" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+  </g>
+</svg>

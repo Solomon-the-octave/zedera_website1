@@ -1,111 +1,155 @@
-import { motion } from "framer-motion";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+import Seo from "../Components/Seo";
+import PageHeader from "../Components/PageHeader";
+import CTABand from "../Components/CTABand";
+import { Label, Reveal, Stat } from "../Components/ui";
+import { CASE_GLYPHS } from "../Components/icons";
+import Figure from "../Components/Figure";
+import { IMAGES, CASE_IMAGE_KEYS } from "../data/images";
+import { CASES, SECTORS } from "../data/site";
 
 export default function Work() {
-  const projectTypes = [
-    {
-      title: "Business Websites",
-      category: "Web Development",
-      desc: "Clean websites for companies that need a stronger and more professional online presence.",
-    },
-    {
-      title: "Digital Platforms",
-      category: "Platforms",
-      desc: "Custom systems for learning, operations, customer access, or internal workflows.",
-    },
-    {
-      title: "AI Tools",
-      category: "AI & Automation",
-      desc: "Practical tools that help teams save time, respond faster, and reduce repetitive work.",
-    },
-    {
-      title: "Brand & Marketing Systems",
-      category: "Digital Branding",
-      desc: "Clearer messaging, stronger visuals, and better digital communication across channels.",
-    },
+  const counts = [
+    { value: String(CASES.length), label: "Engagements listed" },
+    { value: String(SECTORS.length), label: "Sectors covered" },
+    { value: "3", label: "Engagement models" },
   ];
 
   return (
-    <main>
-      <Navbar />
+    <>
+      <Seo
+        title="Selected Work"
+        description="Selected engagements from Zedera Tech Solutions: platforms, applied AI and operational systems across real estate, education, agriculture and professional services."
+      />
 
-      <section className="hero about-hero">
-        <motion.div
-          className="hero-content"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="tagline">Our Work</p>
-
-          <h1>The kind of digital work we help businesses build.</h1>
-
-          <p className="hero-text">
-            From websites and platforms to AI tools and digital branding, we
-            focus on practical solutions that help businesses operate and
-            communicate better.
-          </p>
-        </motion.div>
-      </section>
-
-      <section className="section portfolio">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <p className="tagline">Project Areas</p>
-
-          <h2>We build around what each business actually needs.</h2>
-
-          <div className="portfolio-grid">
-            {projectTypes.map((project, i) => (
-              <motion.div
-                key={i}
-                className="project-card"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="project-image">
-                  <span>{project.title}</span>
-                </div>
-
-                <div className="project-content">
-                  <p className="project-category">{project.category}</p>
-                  <h3>{project.title}</h3>
-                  <p>{project.desc}</p>
-                </div>
-              </motion.div>
+      <PageHeader
+        backdrop="plan-hatch-r"
+        layout="editorial"
+        crumb="Work"
+        label="Selected engagements"
+        title="Systems we have built, and what they had to solve."
+        lede="Each entry states the sector, the engagement model, the stack and the outcome. Client names appear only where we have written permission to use them."
+        aside={
+          <div className="header-counts">
+            {counts.map((c) => (
+              <div key={c.label} className="count-cell">
+                <Stat value={c.value} label={c.label} />
+              </div>
             ))}
           </div>
-        </motion.div>
+        }
+      />
+
+      {/* ---------- CASES ---------- */}
+      <section className="section">
+        <div className="wrap">
+          <div className="grid" style={{ gap: 28 }}>
+            {CASES.map((c, i) => (
+              <Reveal key={c.title} delay={i * 60}>
+                <article className="case">
+                  <div className="case-cover">
+                    <Figure
+                      slot={IMAGES[CASE_IMAGE_KEYS[i % CASE_IMAGE_KEYS.length]]}
+                      fallback={(() => {
+                        const F = CASE_GLYPHS[i % CASE_GLYPHS.length];
+                        return <F size={200} />;
+                      })()}
+                      showCaption={false}
+                    />
+                  </div>
+
+                  <div className="case-main">
+                    {(() => {
+                      const G = CASE_GLYPHS[i % CASE_GLYPHS.length];
+                      return (
+                        <span className="case-glyph">
+                          <G size={116} />
+                        </span>
+                      );
+                    })()}
+                    <div className="case-sector">{c.sector}</div>
+                    <h2 className="serif h3">{c.title}</h2>
+                    <p className="body-sm" style={{ maxWidth: 620 }}>
+                      {c.body}
+                    </p>
+                    <div className="stage-outputs" style={{ marginTop: 24 }}>
+                      {c.capabilities.map((cap) => (
+                        <span key={cap} className="chip">
+                          {cap}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="case-side">
+                    <div>
+                      <div className="meta-key">Engagement</div>
+                      <div className="meta-val">{c.engagement}</div>
+                    </div>
+                    <div>
+                      <div className="meta-key">Stack</div>
+                      <div className="meta-val">{c.stack}</div>
+                    </div>
+                    <div>
+                      <div className="meta-key">Outcome</div>
+                      <div className="meta-val">{c.outcome}</div>
+                    </div>
+                    {c.tbd && (
+                      <div
+                        className="mono"
+                        style={{
+                          fontSize: 10,
+                          letterSpacing: "0.12em",
+                          textTransform: "uppercase",
+                          color: "var(--muted)",
+                          borderTop: "1px solid var(--border)",
+                          paddingTop: 14,
+                        }}
+                      >
+                        Placeholder entry, replace with a confirmed project
+                      </div>
+                    )}
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <section className="cta">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <h2>Have something specific in mind?</h2>
+      {/* ---------- SECTORS ---------- */}
+      <section className="section alt">
+        <div className="wrap">
+          <Reveal>
+            <div className="section-head">
+              <Label>Sectors</Label>
+              <h2 className="serif h2">Industries we work across.</h2>
+              <p className="lede">
+                Operationally complex environments where the system is part of how the business
+                actually runs.
+              </p>
+            </div>
+          </Reveal>
 
-          <p>
-            Tell us what you want to build, and we’ll help shape the right
-            digital solution.
-          </p>
-
-          <a href="/contact" className="btn primary">
-            Start a Project
-          </a>
-        </motion.div>
+          <Reveal>
+            <div className="std-grid mt-56">
+              {SECTORS.map((s, i) => (
+                <div key={s} className="std-item">
+                  <span className="mono" style={{ color: "var(--second-ink)", fontSize: 11 }}>
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span>{s}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
       </section>
 
-      <Footer />
-    </main>
+      <CTABand
+        label="Your project"
+        title="Have something specific in mind? Send us the brief."
+        cta="Send a brief"
+      />
+    </>
   );
 }

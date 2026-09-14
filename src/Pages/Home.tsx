@@ -1,236 +1,234 @@
-import { motion } from "framer-motion";
-import Navbar from "../Components/Navbar";
-import Footer from "../Components/Footer";
+import { Link } from "react-router-dom";
+import Seo from "../Components/Seo";
+import CTABand from "../Components/CTABand";
+import { ArrowRight, Check, Label, Reveal, Stat, TbdNote, Ticker } from "../Components/ui";
+import SystemDiagram from "../Components/SystemDiagram";
+import Figure from "../Components/Figure";
+import { IMAGES } from "../data/images";
+import { CAPABILITY_ICONS, AboutPanel } from "../Components/icons";
+import { COMPANY, HERO_STATS, SERVICES, STACK, STAGES, STANDARDS, TBD } from "../data/site";
+
+function Icon({ id, className }: { id: string; className?: string }) {
+  const C = CAPABILITY_ICONS[id];
+  return C ? (
+    <span className={className}>
+      <C size={40} />
+    </span>
+  ) : null;
+}
 
 export default function Home() {
-  const services = [
-    {
-      number: "01",
-      title: "Web & App Development",
-      desc: "We build websites and applications that look good, work smoothly, and are easy for people to use.",
-    },
-    {
-      number: "02",
-      title: "AI Tools & Automation",
-      desc: "We help businesses use AI in practical ways, from chatbots to automation tools that save time.",
-    },
-    {
-      number: "03",
-      title: "Digital Marketing & Branding",
-      desc: "We support brands with clear messaging, content, visibility, and stronger online presence.",
-    },
-  ];
-
-  const reasons = [
-    {
-      number: "01",
-      title: "Clear direction",
-      desc: "We keep the work organized so every project has a clear goal and structure.",
-    },
-    {
-      number: "02",
-      title: "User-first thinking",
-      desc: "We design around real people, not just around how the page looks.",
-    },
-    {
-      number: "03",
-      title: "Built to grow",
-      desc: "We create systems that can be improved and expanded over time.",
-    },
-    {
-      number: "04",
-      title: "Design that works",
-      desc: "We care about both the visual quality and the functionality behind it.",
-    },
-  ];
-
-  const projectAreas = [
-  {
-    title: "Business Websites",
-    category: "Web Development",
-    image: "/project-images/business-websites.png",
-    desc: "Clean websites for companies that need a stronger and more professional online presence.",
-  },
-
-  {
-    title: "Digital Platforms",
-    category: "Platforms",
-    image: "/project-images/workspace design.png",
-    desc: "Custom systems for learning, operations, customer access, or internal workflows.",
-  },
-
-  {
-    title: "AI Tools",
-    category: "AI & Automation",
-    image: "/project-images/ai tech.png",
-    desc: "Practical tools that help teams save time and reduce repetitive work.",
-  },
-
-  {
-    title: "Brand & Marketing Systems",
-    category: "Digital Branding",
-    image: "/project-images/branding-systems.png",
-    desc: "Clearer messaging, stronger visuals, and better digital communication.",
-  },
-];
-
   return (
-    <main>
-      <Navbar />
+    <>
+      <Seo
+        title="Software Engineering, AI & Digital Systems"
+        description="Zedera Tech Solutions is an engineering partner for organisations in Ethiopia and East Africa, building software, applied AI, platform integrations and dedicated technical teams."
+      />
 
-      <section className="hero">
-        <motion.div
-          className="hero-content"
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <p className="tagline">Zedera Tech Solutions</p>
+      {/* ---------- HERO ---------- */}
+      <section className="plan">
+        <div className="wrap hero">
+          <div className="hero-split">
+            <div className="hero-body">
+              <Label>Engineering partner, Addis Ababa</Label>
 
-          <h1>Technology solutions built for modern businesses.</h1>
+              <h1 className="serif h1">
+                Software, AI and digital systems built to <span className="em-ink">run in production</span>.
+              </h1>
 
-          <p className="hero-text">
-            We design and build websites, platforms, AI tools, and digital
-            systems that help businesses work better and show up stronger
-            online.
-          </p>
+              <p className="lede">
+                Zedera Tech Solutions designs, builds and operates the systems organisations depend
+                on. Engineered to a standard, documented for handover, and supported by a team you
+                can reach.
+              </p>
 
-          <div className="hero-buttons">
-            <a href="/contact" className="btn primary">
-              Start a Project
-            </a>
+              <div className="hero-actions">
+                <Link to="/contact" className="btn btn-accent">
+                  Start a project <ArrowRight />
+                </Link>
+                <Link to="/services" className="btn btn-outline">
+                  View capabilities
+                </Link>
+              </div>
+            </div>
 
-            <a href="/services" className="btn secondary">
-              Explore Services
-            </a>
+            <SystemDiagram />
           </div>
-        </motion.div>
+        </div>
+
+        <div className="stat-rail">
+          <div className="wrap">
+            <div className="grid">
+              {HERO_STATS.map((s) => (
+                <div key={s.label} className="stat-cell">
+                  <Stat value={s.value} label={s.label} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <Ticker items={STACK.flatMap((g) => g.items)} />
       </section>
 
-      <section className="section" id="services">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <p className="tagline">What We Do</p>
+      {/* ---------- CAPABILITIES ---------- */}
+      <section className="section">
+        <div className="wrap">
+          <Reveal>
+            <div className="section-head">
+              <Label>Capabilities</Label>
+              <h2 className="serif h2">Six practices, one delivery team.</h2>
+              <p className="lede">
+                Most engagements draw on more than one. They are run by the same delivery lead, to
+                the same standard, under a single written scope.
+              </p>
+            </div>
+          </Reveal>
 
-          <h2>We help businesses build better digital tools and experiences.</h2>
-
-          <div className="cards">
-            {services.map((service) => (
-              <motion.div
-                key={service.number}
-                className="card"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <span className="card-number">{service.number}</span>
-                <h3>{service.title}</h3>
-                <p>{service.desc}</p>
-              </motion.div>
+          <div className="grid g-3 gap-lg mt-56">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.id} delay={i * 60}>
+                <article className="card" style={{ height: "100%" }}>
+                  <div className="card-top">
+                    <div className="card-index">{String(i + 1).padStart(2, "0")}</div>
+                    <Icon className="cap-icon" id={s.id} />
+                  </div>
+                  <h3 className="serif h3">{s.title}</h3>
+                  <p className="body-sm">{s.summary}</p>
+                  <div className="card-list">
+                    {s.chips.slice(0, 4).map((c) => (
+                      <span key={c} className="chip">
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              </Reveal>
             ))}
           </div>
-        </motion.div>
+
+          <Reveal>
+            <div className="mt-40">
+              <Link to="/services" className="btn btn-outline">
+                All capabilities <ArrowRight />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
-      <section className="section why-section" id="why">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <p className="tagline">Why Zedera</p>
+      {/* ---------- STACK ---------- */}
+      <section className="section ink">
+        <div className="wrap">
+          <Reveal>
+            <div className="section-head">
+              <Label light>Technology</Label>
+              <h2 className="serif h2 on-dark">
+                A deliberately boring stack, chosen to still be maintainable in five years.
+              </h2>
+              <p className="lede">
+                We pick proven tools over novel ones, and we write down why. Every architecture
+                decision is recorded so the next engineer, ours or yours, can follow the reasoning.
+              </p>
+            </div>
+          </Reveal>
 
-          <h2>
-            We build digital solutions that feel clear, practical, and easy to
-            use.
+          <Reveal>
+            <div className="stack-grid mt-56">
+              {STACK.map((g) => (
+                <div key={g.group} className="stack-cell">
+                  <div className="meta-key">{g.group}</div>
+                  <ul>
+                    {g.items.map((it) => (
+                      <li key={it}>{it}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          {TBD.unverified && <TbdNote>Placeholder, confirm stack before publishing</TbdNote>}
+        </div>
+      </section>
+
+      {/* ---------- DELIVERY STANDARDS ---------- */}
+      <section className="section alt">
+        <div className="wrap">
+          <Reveal>
+            <div className="section-head">
+              <Label>Delivery standards</Label>
+              <h2 className="serif h2">Applied on every engagement, without being asked.</h2>
+              <p className="lede">
+                These are the baseline engineering practices. They sit in the scope document, not
+                the sales pitch.
+              </p>
+            </div>
+          </Reveal>
+
+          <Reveal>
+            <div className="std-grid mt-56">
+              {STANDARDS.map((s) => (
+                <div key={s} className="std-item">
+                  <Check />
+                  <span>{s}</span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ---------- IMAGE BAND ---------- */}
+      <section className="band">
+        <Figure slot={IMAGES.office} fallback={<AboutPanel />} showCaption={false} />
+        <div className="wrap band-body">
+          <Label light>The team</Label>
+          <h2 className="serif h2 on-dark">
+            Engineers, designers and AI specialists, building from Addis Ababa.
           </h2>
-
-          <p className="why-intro">
-            We keep the process simple, focus on the people using the product,
-            and build systems that can grow with the business.
-          </p>
-
-          <div className="why-cards">
-            {reasons.map((reason) => (
-              <motion.div
-                key={reason.number}
-                className="why-card"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <span>{reason.number}</span>
-                <h3>{reason.title}</h3>
-                <p>{reason.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        </div>
       </section>
 
-      <section className="section portfolio" id="work">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <p className="tagline">Project Areas</p>
+      {/* ---------- HOW WE DELIVER (horizontal rail) ---------- */}
+      <section className="section">
+        <div className="wrap">
+          <Reveal>
+            <div className="section-head">
+              <Label>How we deliver</Label>
+              <h2 className="serif h2">Five stages, each with a defined output.</h2>
+              <p className="lede">
+                You always know which stage the engagement is in, what comes out of it, and who is
+                accountable for it.
+              </p>
+            </div>
+          </Reveal>
 
-          <h2>We build around what each business actually needs.</h2>
-
-          <div className="portfolio-grid">
-            {projectAreas.map((project) => (
-              <motion.div
-                key={project.title}
-                className="project-card"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                viewport={{ once: true }}
-              >
-                <div className="project-image">
-                  <img src={project.image} alt={project.title} />
+          <Reveal>
+            <div className="step-rail mt-56">
+              {STAGES.map((s) => (
+                <div key={s.num} className="step-cell">
+                  <div className="step-n">
+                    {s.num} / {s.duration}
+                  </div>
+                  <h3 className="serif">{s.short}</h3>
+                  <p>{s.outputs[0]}</p>
                 </div>
+              ))}
+            </div>
+          </Reveal>
 
-                <div className="project-content">
-                  <p className="project-category">{project.category}</p>
-                  <h3>{project.title}</h3>
-                  <p>{project.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+          <Reveal>
+            <div className="mt-40">
+              <Link to="/process" className="btn btn-outline">
+                The full delivery process <ArrowRight />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
-      <section className="cta" id="contact">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-        >
-          <h2>Have a project in mind?</h2>
-
-          <p>
-            Let’s talk about what you want to build and how Zedera can help.
-          </p>
-
-          <a href="/contact" className="btn primary">
-            Contact Zedera
-          </a>
-        </motion.div>
-      </section>
-
-      <Footer />
-    </main>
+      <CTABand label="Get in touch" title={`Talk to ${COMPANY.name} about the system you need.`} />
+    </>
   );
 }

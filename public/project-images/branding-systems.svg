@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320">
+  <defs>
+    <linearGradient id="bg-branding-systems" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1F7DAD"/>
+      <stop offset="100%" stop-color="#1C478B"/>
+    </linearGradient>
+    <radialGradient id="glow-branding-systems" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="480" height="320" fill="url(#bg-branding-systems)"/>
+  
+  <g transform="translate(360,170) scale(1.2)" opacity="0.14">
+    <polygon points="0,0 100,0 0,100" fill="#67C8B7" />
+    <polygon points="100,0 100,100 0,100" fill="#89B8CA" />
+    <rect x="0" y="100" width="60" height="60" fill="#89B8CA" />
+  </g>
+  <circle cx="240.0" cy="152.0" r="118" fill="url(#glow-branding-systems)"/>
+  
+  <g transform="translate(150,80)">
+    <polygon points="20,55 112,22 112,118 20,85" stroke="#F4FAFB" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="4" y="68" width="18" height="34" rx="5" stroke="#F4FAFB" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M132 42 Q150 70 132 98" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <path d="M152 30 Q178 70 152 110" stroke="#F4FAFB" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    <circle cx="60" cy="70" r="5" fill="#F4FAFB" opacity="0.9"/>
+  </g>
+</svg>

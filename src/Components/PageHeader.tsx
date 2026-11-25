@@ -1,121 +1,56 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
-import { Label } from "./ui";
-
-type Backdrop = "plan" | "plan-hatch" | "plan-hatch-r" | "plan-rings" | "plan-dots";
-type Layout = "rule" | "index" | "centre" | "editorial" | "compact";
+import { Eyebrow } from "./ui";
+import { useT } from "../i18n/context";
 
 /**
- * Inner-page header. Each page picks its own `backdrop` texture AND its own
- * `layout`, so the headers differ in structure, not just in wallpaper.
- *
- *  rule       accent bar beside the title, lede in a second column   (about)
- *  index      oversized ghost numeral behind the title               (services)
- *  centre     everything centred                                     (process)
- *  editorial  oversized title, lede dropped to the right below it    (work)
- *  compact    title and lede side by side, tighter                   (contact)
+ * Inner-page header: breadcrumb, eyebrow, title with accent line, lede,
+ * and a page-specific illustration on the right (see HeaderArt.tsx).
  */
 export default function PageHeader({
-  label,
-  title,
-  lede,
   crumb,
-  backdrop = "plan",
-  layout = "rule",
-  ghost,
-  aside,
+  eyebrow,
+  title,
+  accent,
+  lede,
+  art,
+  children,
 }: {
-  label: string;
-  title: string;
-  lede: string;
   crumb: string;
-  backdrop?: Backdrop;
-  layout?: Layout;
-  /** numeral drawn behind the title when layout is "index" */
-  ghost?: string;
-  aside?: ReactNode;
+  eyebrow: string;
+  title: string;
+  accent?: string;
+  lede: string;
+  art?: ReactNode;
+  children?: ReactNode;
 }) {
-  const Crumb = (
-    <div className="crumb mono">
-      <Link to="/">Zedera</Link>
-      <span className="sep">/</span>
-      <span>{crumb}</span>
-    </div>
-  );
-
-  const Heading = (
-    <h1 className="serif h1" style={{ marginTop: 22 }}>
-      {title}
-    </h1>
-  );
-
-  const Lede = <p className="lede">{lede}</p>;
-
-  let body: ReactNode;
-
-  if (layout === "index") {
-    body = (
-      <div className="ph-index">
-        {ghost ? (
-          <span className="ph-ghost" aria-hidden="true">
-            {ghost}
-          </span>
-        ) : null}
-        {Crumb}
-        <Label>{label}</Label>
-        {Heading}
-        {Lede}
-      </div>
-    );
-  } else if (layout === "centre") {
-    body = (
-      <div className="ph-centre">
-        {Crumb}
-        <Label>{label}</Label>
-        {Heading}
-        {Lede}
-      </div>
-    );
-  } else if (layout === "editorial") {
-    body = (
-      <div className="ph-editorial">
-        {Crumb}
-        <Label>{label}</Label>
-        {Heading}
-        <div className="ph-foot">{Lede}</div>
-      </div>
-    );
-  } else if (layout === "compact") {
-    body = (
-      <div>
-        {Crumb}
-        <Label>{label}</Label>
-        <div className="ph-compact" style={{ marginTop: 18 }}>
-          <h1 className="serif h1">{title}</h1>
-          {Lede}
-        </div>
-      </div>
-    );
-  } else {
-    body = (
-      <div className="ph-rule">
-        <div>
-          {Crumb}
-          <div className="ph-title">
-            <Label>{label}</Label>
-            {Heading}
-          </div>
-        </div>
-        {Lede}
-      </div>
-    );
-  }
-
+  const t = useT();
   return (
-    <section className={backdrop}>
-      <div className="wrap page-header">
-        {body}
-        {aside ? <div className="header-aside">{aside}</div> : null}
+    <section className={`page-header${art ? " has-art" : ""}`}>
+      <div className="hero-bg" aria-hidden="true">
+        <div className="hero-grid" />
+      </div>
+      <div className="wrap page-header-grid">
+        <div className="page-header-inner">
+          <div className="crumb">
+            <Link to="/">{t.common.home}</Link>
+            <span aria-hidden="true">/</span>
+            <span>{crumb}</span>
+          </div>
+          <Eyebrow>{eyebrow}</Eyebrow>
+          <h1 className="h1">
+            {title}
+            {accent ? (
+              <>
+                <br />
+                <span className="accent">{accent}</span>
+              </>
+            ) : null}
+          </h1>
+          <p className="lede lede-lg">{lede}</p>
+          {children}
+        </div>
+        {art ? <div className="page-header-art">{art}</div> : null}
       </div>
     </section>
   );

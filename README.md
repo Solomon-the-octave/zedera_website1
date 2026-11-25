@@ -1,7 +1,7 @@
-# Zedera Tech Solutions — website
+# Zedera Tech Solutions website
 
-Corporate site for Zedera Tech Solutions. React 19 + TypeScript + Vite, plain
-CSS design system, deployed on Netlify.
+Company site for Zedera Tech Solutions. React 19 + TypeScript + Vite, plain
+CSS design system, deployed on Vercel.
 
 ## Run
 
@@ -16,53 +16,64 @@ npm run preview  # serve the production build
 
 ```
 src/
-  index.css              design system — tokens, type scale, components
-  data/site.ts           ALL site copy and content. Edit here, not in pages.
+  index.css                 design system: tokens, type, components, responsive
+  i18n/en.ts                ALL English copy. Edit text here, not in pages.
+  i18n/am.ts                Amharic copy, same shape as en.ts (TypeScript checks it).
+  i18n/PrefsProvider.tsx    language (EN/AM) and theme (light/dark), saved per visitor
+  data/site.ts              fixed company data: email, phones, WhatsApp, routes, stack
   Components/
-    Nav.tsx              scroll-aware header (transparent over dark tops)
+    Logo.tsx                Zedera mark (color / onDark / mono) and wordmark
+    Nav.tsx                 floating pill navigation + mobile drawer
     Footer.tsx
-    Layout.tsx           nav + main + footer shell
-    PageHeader.tsx       dark blueprint header for inner pages
-    CTABand.tsx
-    Seo.tsx              per-route title / description / canonical / OG tags
-    ScrollToTop.tsx      resets scroll on route change
-    ui.tsx               icons, section label, scroll reveal
-  Pages/                 Home, About, Services, Process, Work, Contact, NotFound
+    Layout.tsx              nav + main + footer + WhatsApp button
+    HeroVisual.tsx          home hero: dashboard connected to module chips
+    ServiceArt.tsx          service icons and mini UI previews
+    SolutionsExplorer.tsx   tabbed "choose your sector" panel
+    PageHeader.tsx          inner page header
+    CTABand.tsx             closing call to action
+    Seo.tsx                 per-route title, description, canonical, OG tags
+    ScrollToTop.tsx         resets scroll, supports /page#section links
+    ui.tsx                  eyebrow, section heading, reveal, marquee, icons
+  Pages/                    Home, Services, Solutions, Process, About, Contact, NotFound
+                            (Work.tsx redirects /work to /solutions)
+public/
+  logo-mark.svg, favicon.svg, apple-touch-icon.png, icon-512.png, og-image.png
 ```
 
-## Editing content
+## Language and theme
 
-Almost all copy lives in `src/data/site.ts`. Pages are structural.
+- The globe button in the nav switches English / Amharic. The choice is saved in
+  the visitor's browser and sets `<html lang>`.
+- The moon / sun button switches light / dark mode (dark is the default).
+  A small script in `index.html` applies the saved choice before the page paints.
+- Amharic text uses Noto Sans Ethiopic. Have a native speaker review `am.ts`
+  before launch.
 
-## ⚠️ Before going live
+## Brand
 
-`src/data/site.ts` contains clearly-marked placeholders that must be replaced:
+- Colours: teal `#66CBB8`, blue `#306EF5`, navy ink `#0B1430`, paper `#F6F6F1`
+- Type: Sora (headings), Inter (text), JetBrains Mono (labels), Noto Sans Ethiopic (Amharic), from Google Fonts
+- Logo: the refined mark on a golden-ratio grid. On blue or navy backgrounds use
+  the `onDark` variant, where the blue shapes turn white.
 
-1. **`TBD` object** — the four hero/about statistics (systems delivered, years
-   operating, engineers, markets). Replace with real figures, then set
-   `unverified: false` to hide the on-page placeholder notices.
-2. **`CASES`** — four placeholder engagements. Replace each with a real project.
-   Use a client's name only with written permission; otherwise describe the
-   engagement without naming them. Remove `tbd: true` once an entry is real.
-3. **`STACK`** — confirm this reflects the technologies Zedera actually works in.
-4. **`SECTORS`** — confirm the sector list.
-5. **`COMPANY.addressLines`** — confirm the full office address.
+## Content rule
+
+Publish nothing that cannot be backed up. No client names, case studies,
+statistics or testimonials until they are real and the client has approved them.
+Dashboard figures in the hero and service previews are labelled sample UI.
 
 ## Contact form
 
-The form on `/contact` submits to **Netlify Forms**. Two pieces make this work:
+The form posts JSON to `VITE_FORM_ENDPOINT` (Formspree, Web3Forms or your own
+API). Set it in Vercel under **Settings > Environment Variables**, then redeploy.
 
-- a hidden static `<form name="contact">` in `index.html`, which Netlify's
-  build-time crawler detects;
-- `src/Pages/Contact.tsx`, which posts the same field names back to `/`.
+Without it, the form still works: it opens the visitor's email app with the
+message filled in, addressed to `zederaet@gmail.com`.
 
-Submissions appear under **Forms** in the Netlify dashboard. Set up a
-notification email there so enquiries reach an inbox.
+## Deploy on Vercel
 
-To move to a different provider (Formspree, Web3Forms, your own API), change
-`FORM_ENDPOINT` in `Contact.tsx` — nothing else needs to change.
-
-## Deployment
-
-`netlify.toml` rewrites all paths to `index.html` so client-side routing works
-on hard refresh and deep links.
+1. Push this folder to a new GitHub repository.
+2. In Vercel, **Add New > Project**, import the repository. The framework is
+   detected as Vite; `vercel.json` sets the build command, output folder, SPA
+   rewrites and asset caching.
+3. Add the `zederaet.com` domain under **Settings > Domains**.

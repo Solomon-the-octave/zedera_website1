@@ -1,67 +1,67 @@
 import { Link } from "react-router-dom";
-import { COMPANY, ROUTES, SERVICES } from "../data/site";
+import { COMPANY, ROUTES, telHref, whatsappHref } from "../data/site";
+import { useT } from "../i18n/context";
+import { Logo } from "./Logo";
 
 export default function Footer() {
+  const t = useT();
   return (
-    <footer className="footer">
+    <footer className="footer on-dark">
       <div className="wrap">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link to="/" className="brand">
-              <img src="/logo-mark.svg" alt="" aria-hidden="true" />
-              <span className="brand-text">
-                <span className="brand-name">{COMPANY.name}</span>
-                <span className="brand-sub">{COMPANY.tagline}</span>
-              </span>
+            <Link to="/" aria-label={`${COMPANY.legalName} ${t.nav.home}`}>
+              <Logo variant="color" />
             </Link>
-            <p className="footer-desc">{COMPANY.description}</p>
+            <p className="footer-desc">{t.company.description}</p>
+            <div className="footer-social">
+              <a href={COMPANY.instagram} target="_blank" rel="noreferrer">
+                Instagram
+              </a>
+              <a href={whatsappHref(t.common.whatsappText)} target="_blank" rel="noreferrer">
+                WhatsApp
+              </a>
+            </div>
           </div>
 
           <div className="footer-col">
-            <div className="footer-col-head">Company</div>
-            <Link to="/">Home</Link>
+            <div className="footer-head">{t.footer.company}</div>
+            <Link to="/">{t.common.home}</Link>
             {ROUTES.map((r) => (
               <Link key={r.href} to={r.href}>
-                {r.label}
+                {t.nav[r.key]}
               </Link>
             ))}
           </div>
 
           <div className="footer-col">
-            <div className="footer-col-head">Capabilities</div>
-            {SERVICES.map((s) => (
-              <Link key={s.id} to="/services">
+            <div className="footer-head">{t.footer.services}</div>
+            {t.services.map((s) => (
+              <Link key={s.id} to={`/services#${s.id}`}>
                 {s.title}
               </Link>
             ))}
           </div>
 
           <div className="footer-col">
-            <div className="footer-col-head">Contact</div>
+            <div className="footer-head">{t.footer.contact}</div>
             <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
             {COMPANY.phones.map((p) => (
-              <a key={p} href={`tel:${p}`}>
+              <a key={p} href={telHref(p)}>
                 {p}
               </a>
             ))}
-            {COMPANY.addressLines.map((line) => (
+            {t.company.address.map((line) => (
               <span key={line}>{line}</span>
             ))}
-            <a href={COMPANY.url}>{`www.${COMPANY.domain}`}</a>
           </div>
-        </div>
-
-        <div className="footer-mark serif" aria-hidden="true">
-          {COMPANY.name.toUpperCase()}
         </div>
 
         <div className="footer-bottom">
           <span>
-            © {new Date().getFullYear()} {COMPANY.legalName}. All rights reserved.
+            © {new Date().getFullYear()} {COMPANY.legalName}. {t.footer.rights}
           </span>
-          <span className="mono" style={{ letterSpacing: "0.1em" }}>
-            Addis Ababa · East Africa
-          </span>
+          <span>{t.company.location}</span>
         </div>
       </div>
     </footer>

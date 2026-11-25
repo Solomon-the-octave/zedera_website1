@@ -1,177 +1,113 @@
+import { Link } from "react-router-dom";
 import Seo from "../Components/Seo";
 import PageHeader from "../Components/PageHeader";
+import { ServicesArt } from "../Components/HeaderArt";
 import CTABand from "../Components/CTABand";
-import { Label, Reveal } from "../Components/ui";
-import { CAPABILITY_ICONS } from "../Components/icons";
-import { ENGAGEMENTS, SERVICES } from "../data/site";
+import { ServiceIcon, ServicePreview } from "../Components/ServiceArt";
+import { ArrowRight, Check, Reveal, SectionHead } from "../Components/ui";
+import { useT } from "../i18n/context";
 
 export default function Services() {
+  const t = useT();
+  const pg = t.pages.services;
   return (
     <>
-      <Seo
-        title="Capabilities & Services"
-        description="Software engineering, applied AI, platform integration, product design, digital growth systems and dedicated engineering teams, delivered under a written scope."
-      />
+      <Seo title={t.seo.services.title} description={t.seo.services.description} />
 
-      <PageHeader
-        backdrop="plan"
-        layout="index"
-        ghost="06"
-        crumb="Services"
-        label="Capabilities"
-        title="What we build, and how it is scoped."
-        lede="Six practices delivered by one team. Every engagement begins with a written scope, acceptance criteria and a named delivery lead."
-        aside={
-          <div className="header-chips">
-            {SERVICES.map((s, i) => (
-              <a key={s.id} href={`#${s.id}`} className="pill">
-                <i>{String(i + 1).padStart(2, "0")}</i>
-                {s.tag}
-              </a>
-            ))}
-          </div>
-        }
-      />
+      <PageHeader crumb={pg.crumb} eyebrow={pg.eyebrow} title={pg.title} accent={pg.accent} lede={pg.lede}
+        art={<ServicesArt />}>
+        <div className="jump">
+          {t.services.map((s) => (
+            <a key={s.id} href={`#${s.id}`} className="jump-chip">
+              <ServiceIcon id={s.id} size={16} />
+              {s.title}
+            </a>
+          ))}
+        </div>
+      </PageHeader>
 
-      {/* ---------- CAPABILITY BLOCKS ---------- */}
       <section className="section">
-        <div className="wrap">
-          {SERVICES.map((s, i) => {
-            const Glyph = CAPABILITY_ICONS[s.id];
-            return (
+        <div className="wrap svc-list">
+          {t.services.map((s, i) => (
             <Reveal key={s.id}>
-              <article className="cap-block" id={s.id}>
-                <div className="cap-copy">
-                  <div className="cap-marker">
-                    <span className="cap-n">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="cap-tag">{s.tag}</span>
-                    <span className="cap-icon" style={{ marginLeft: "auto" }}>
-                      {Glyph ? <Glyph size={42} /> : null}
-                    </span>
-                  </div>
-                  <h2 className="serif h3">{s.title}</h2>
-                  <p className="lede" style={{ marginTop: 12, fontSize: 16 }}>
-                    {s.summary}
-                  </p>
-                  <p className="body-sm" style={{ marginTop: 14 }}>
-                    {s.detail}
+              <article id={s.id} className={`svc-row${i % 2 ? " flip" : ""}`}>
+                <div className="svc-row-copy">
+                  <span className="icon-tile icon-tile-lg">
+                    <ServiceIcon id={s.id} size={24} />
+                  </span>
+                  <h2 className="h3">{s.title}</h2>
+                  <p className="lede">{s.summary}</p>
+                  <p className="body">{s.detail}</p>
+                  <ul className="check-list two">
+                    {s.includes.map((x) => (
+                      <li key={x}>
+                        <span className="check-icon">
+                          <Check size={12} />
+                        </span>
+                        {x}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="svc-typical">
+                    <span>{t.common.typicalProjects}</span>
+                    {s.typical}
                   </p>
                 </div>
-
-                <div className="cap-spec">
-                  <div className="spec-row">
-                    <div className="meta-key">Typical engagement</div>
-                    <div className="meta-val">{s.typical}</div>
-                  </div>
-                  <div className="spec-row">
-                    <div className="meta-key">Team</div>
-                    <div className="meta-val">{s.lead}</div>
-                  </div>
-                  <div style={{ paddingTop: 20 }}>
-                    <div className="meta-key">Tools & methods</div>
-                    <div className="stage-outputs" style={{ marginTop: 12 }}>
-                      {s.chips.map((c) => (
-                        <span key={c} className="chip">
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <div className="svc-row-art">
+                  <ServicePreview id={s.id} />
                 </div>
               </article>
             </Reveal>
-            );
-          })}
+          ))}
         </div>
       </section>
 
-      {/* ---------- ENGAGEMENT MODELS ---------- */}
-      <section className="section alt">
+      <section className="section section-alt">
         <div className="wrap">
           <Reveal>
-            <div className="section-head">
-              <Label>Engagement models</Label>
-              <h2 className="serif h2">Three ways to work with us.</h2>
-              <p className="lede">
-                The commercial shape follows the problem. We will tell you which one fits before you
-                ask.
-              </p>
-            </div>
+            <SectionHead center eyebrow={pg.engEyebrow} title={pg.engTitle} accent={pg.engAccent} />
           </Reveal>
-
-          <Reveal>
-            <div className="cmp-wrap mt-56">
-              <table className="cmp">
-                <thead>
-                  <tr>
-                    <th scope="col">Model</th>
-                    {ENGAGEMENTS.map((e) => (
-                      <th key={e.title} scope="col">
-                        {e.title}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">Best for</th>
-                    {ENGAGEMENTS.map((e) => (
-                      <td key={e.title}>{e.bestFor}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th scope="row">Commercial</th>
-                    {ENGAGEMENTS.map((e) => (
-                      <td key={e.title}>
-                        <strong>{e.commercial}</strong>
-                      </td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th scope="row">Duration</th>
-                    {ENGAGEMENTS.map((e) => (
-                      <td key={e.title}>{e.duration}</td>
-                    ))}
-                  </tr>
-                  <tr>
-                    <th scope="row">Team</th>
-                    {ENGAGEMENTS.map((e) => (
-                      <td key={e.title}>{e.team}</td>
-                    ))}
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-
-          {/* Same information, stacked, for phone widths */}
-          <Reveal>
-            <div className="cmp-stack mt-56">
-              {ENGAGEMENTS.map((e) => (
-                <div className="cmp-card" key={e.title}>
-                  <h3 className="serif">{e.title}</h3>
+          <div className="eng-grid">
+            {t.engagements.map((e, i) => (
+              <Reveal key={e.title} delay={i * 70}>
+                <div className="eng-card">
+                  <h3 className="h4">{e.title}</h3>
                   <dl>
-                    <dt>Best for</dt>
+                    <dt>{t.common.bestFor}</dt>
                     <dd>{e.bestFor}</dd>
-                    <dt>Commercial</dt>
-                    <dd>{e.commercial}</dd>
-                    <dt>Duration</dt>
-                    <dd>{e.duration}</dd>
-                    <dt>Team</dt>
-                    <dd>{e.team}</dd>
+                    <dt>{t.common.terms}</dt>
+                    <dd>{e.terms}</dd>
                   </dl>
+                  <Link to="/contact" className="link-arrow">
+                    {t.common.askAbout} <ArrowRight size={14} />
+                  </Link>
                 </div>
-              ))}
-            </div>
-          </Reveal>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      <CTABand
-        label="Scoping"
-        title="Not sure which capability you need? That is what the first conversation is for."
-        cta="Book a scoping call"
-      />
+      <section className="section">
+        <div className="wrap faq-wrap">
+          <Reveal>
+            <SectionHead eyebrow={pg.faqEyebrow} title={pg.faqTitle} accent={pg.faqAccent} />
+          </Reveal>
+          <div className="faq">
+            {t.faq.map((f) => (
+              <details key={f.q} className="faq-item">
+                <summary>
+                  {f.q}
+                  <span className="faq-plus" aria-hidden="true" />
+                </summary>
+                <p className="body">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CTABand />
     </>
   );
 }

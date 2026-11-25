@@ -2,27 +2,30 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import Seo from "../Components/Seo";
 import PageHeader from "../Components/PageHeader";
-import { ArrowRight, Label, Reveal } from "../Components/ui";
-import { COMPANY, ENGAGEMENTS, NEXT_STEPS, SERVICES } from "../data/site";
+import { ContactArt } from "../Components/HeaderArt";
+import { ArrowRight, Reveal, SectionHead } from "../Components/ui";
+import { COMPANY, telHref, whatsappHref } from "../data/site";
+import { useT } from "../i18n/context";
 
 /**
- * Where the contact form posts is configured, not hard coded, so the site
- * is not tied to one host.
+ * Where the contact form posts is configured, not hard coded:
  *
  *   VITE_FORM_ENDPOINT   an endpoint that accepts a JSON POST
  *                        (Formspree, Web3Forms, your own API route)
  *
  * Set it in Vercel under Settings -> Environment Variables, then redeploy.
  *
- * With no endpoint configured the form does NOT fail silently: submitting
- * opens the visitor's mail client with the brief pre-filled and addressed
- * to COMPANY.email, so the enquiry still reaches you.
+ * With no endpoint configured the form does not fail silently: submitting
+ * opens the visitor's mail client with the brief filled in, addressed to
+ * COMPANY.email.
  */
 const FORM_ENDPOINT = import.meta.env.VITE_FORM_ENDPOINT;
 
 type Status = "idle" | "sending" | "ok" | "err";
 
 export default function Contact() {
+  const t = useT();
+  const pg = t.pages.contact;
   const [status, setStatus] = useState<Status>("idle");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -34,21 +37,19 @@ export default function Contact() {
     if (data["bot-field"]) return;
     delete data["bot-field"];
 
-    // No endpoint configured: hand the brief to the visitor's mail client
-    // rather than pretending to send it.
     if (!FORM_ENDPOINT) {
       const body = [
-        `Name: ${data.name || ""}`,
-        `Organisation: ${data.organisation || ""}`,
-        `Email: ${data.email || ""}`,
-        `Capability: ${data.capability || ""}`,
-        `Engagement: ${data.engagement || ""}`,
+        `${pg.name}: ${data.name || ""}`,
+        `${pg.organisation}: ${data.organisation || ""}`,
+        `${pg.emailField}: ${data.email || ""}`,
+        `${pg.phone}: ${data.phone || ""}`,
+        `${pg.need} ${data.service || ""}`,
         "",
         data.message || "",
       ].join("\n");
       window.location.href =
         `mailto:${COMPANY.email}` +
-        `?subject=${encodeURIComponent("Project brief from " + (data.name || "the website"))}` +
+        `?subject=${encodeURIComponent(pg.mailSubject(data.name || ""))}` +
         `&body=${encodeURIComponent(body)}`;
       return;
     }
@@ -70,191 +71,128 @@ export default function Contact() {
 
   return (
     <>
-      <Seo
-        title="Contact"
-        description={`Talk to ${COMPANY.legalName} about a software, AI or platform engagement. Based in Addis Ababa, working across Ethiopia and East Africa.`}
-      />
+      <Seo title={t.seo.contact.title} description={t.seo.contact.description} />
 
-      <PageHeader
-        backdrop="plan-dots"
-        layout="compact"
-        crumb="Contact"
-        label="Get in touch"
-        title="Tell us what you are trying to build."
-        lede="Send a brief, even a rough one. We will come back with whether we are the right partner, and what scoping it properly would involve."
-        aside={
-          <div className="header-actions">
-            <a className="action-chip" href={`mailto:${COMPANY.email}`}>
-              <span className="chip-key">Email</span>
-              <span className="chip-val">{COMPANY.email}</span>
-            </a>
-            <a className="action-chip" href={`tel:${COMPANY.phones[0]}`}>
-              <span className="chip-key">Phone</span>
-              <span className="chip-val">{COMPANY.phones.join(" / ")}</span>
-            </a>
-            <div className="action-chip">
-              <span className="chip-key">Office</span>
-              <span className="chip-val">{COMPANY.addressLines.join(", ")}</span>
-            </div>
-          </div>
-        }
-      />
+      <PageHeader crumb={pg.crumb} eyebrow={pg.eyebrow} title={pg.title} accent={pg.accent} lede={pg.lede}
+        art={<ContactArt />} />
 
-      {/* ---------- FORM ---------- */}
-      <section className="section">
-        <div className="wrap contact-grid">
+      <section className="section section-tight">
+        <div className="wrap contact">
           <Reveal>
-            <div>
-              <Label>Send a brief</Label>
-              <h2 className="serif h2" style={{ marginTop: 18 }}>
-                The more specific, the faster we can be useful.
-              </h2>
-              <p className="lede" style={{ marginTop: 18 }}>
-                Enquiries are read by a delivery lead, not a sales inbox. If we are not the right
-                fit for the work, we will say so and point you somewhere better.
-              </p>
-
-              <div className="detail-list">
-                <div className="detail-row">
-                  <div className="detail-key">Response</div>
-                  <div className="detail-val">Within two working days</div>
-                </div>
-                <div className="detail-row">
-                  <div className="detail-key">Hours</div>
-                  <div className="detail-val">Monday to Friday, 9:00 to 18:00 EAT</div>
-                </div>
-                <div className="detail-row">
-                  <div className="detail-key">Web</div>
-                  <div className="detail-val">
-                    <a href={COMPANY.url}>{`www.${COMPANY.domain}`}</a>
-                  </div>
-                </div>
+            <div className="contact-side">
+              <a className="contact-card dup" href={`mailto:${COMPANY.email}`}>
+                <span className="contact-key">{pg.email}</span>
+                <span className="contact-val">{COMPANY.email}</span>
+              </a>
+              <div className="contact-card dup">
+                <span className="contact-key">{pg.phone}</span>
+                {COMPANY.phones.map((p) => (
+                  <a key={p} className="contact-val" href={telHref(p)}>
+                    {p}
+                  </a>
+                ))}
+              </div>
+              <a
+                className="contact-card dup"
+                href={whatsappHref(t.common.whatsappText)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="contact-key">{pg.whatsapp}</span>
+                <span className="contact-val">{pg.whatsappVal}</span>
+              </a>
+              <div className="contact-card">
+                <span className="contact-key">{pg.office}</span>
+                <span className="contact-val">{t.company.address.join(", ")}</span>
+                <span className="contact-sub">{pg.hours}</span>
               </div>
             </div>
           </Reveal>
 
           <Reveal delay={80}>
-            <form className="form" onSubmit={handleSubmit} noValidate={false}>
-              {/* honeypot */}
+            <form className="form" onSubmit={handleSubmit}>
               <p hidden>
                 <label>
-                  Leave this empty: <input name="bot-field" />
+                  Leave this empty: <input name="bot-field" tabIndex={-1} autoComplete="off" />
                 </label>
               </p>
 
               {status === "ok" && (
                 <div className="form-status ok" role="status">
-                  Thank you, your brief has been received. We will reply within two working days.
+                  {pg.ok}
                 </div>
               )}
               {status === "err" && (
                 <div className="form-status err" role="alert">
-                  Something went wrong sending the form. Please email{" "}
-                  <a href={`mailto:${COMPANY.email}`} style={{ textDecoration: "underline" }}>
-                    {COMPANY.email}
-                  </a>{" "}
-                  instead.
+                  {pg.errBefore} <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a> {pg.errAfter}
                 </div>
               )}
 
-              <div className="field">
-                <label htmlFor="name">Full name</label>
-                <input id="name" name="name" type="text" required autoComplete="name" />
+              <div className="form-grid">
+                <div className="field">
+                  <label htmlFor="name">{pg.name}</label>
+                  <input id="name" name="name" type="text" required autoComplete="name" />
+                </div>
+                <div className="field">
+                  <label htmlFor="organisation">{pg.organisation}</label>
+                  <input id="organisation" name="organisation" type="text" autoComplete="organization" />
+                </div>
+                <div className="field">
+                  <label htmlFor="email">{pg.emailField}</label>
+                  <input id="email" name="email" type="email" required autoComplete="email" />
+                </div>
+                <div className="field">
+                  <label htmlFor="phone">{pg.phoneField}</label>
+                  <input id="phone" name="phone" type="tel" autoComplete="tel" />
+                </div>
               </div>
 
               <div className="field">
-                <label htmlFor="organisation">Organisation</label>
-                <input
-                  id="organisation"
-                  name="organisation"
-                  type="text"
-                  autoComplete="organization"
-                />
-              </div>
-
-              <div className="field">
-                <label htmlFor="email">Work email</label>
-                <input id="email" name="email" type="email" required autoComplete="email" />
-              </div>
-
-              <div className="field">
-                <label htmlFor="capability">What do you need</label>
-                <select id="capability" name="capability" defaultValue="">
+                <label htmlFor="service">{pg.need}</label>
+                <select id="service" name="service" defaultValue="">
                   <option value="" disabled>
-                    Select a capability
+                    {pg.selectService}
                   </option>
-                  {SERVICES.map((s) => (
+                  {t.services.map((s) => (
                     <option key={s.id} value={s.title}>
                       {s.title}
                     </option>
                   ))}
-                  <option value="Not sure yet">Not sure yet</option>
+                  <option value={pg.notSure}>{pg.notSure}</option>
                 </select>
               </div>
 
               <div className="field">
-                <label htmlFor="engagement">Preferred engagement</label>
-                <select id="engagement" name="engagement" defaultValue="">
-                  <option value="" disabled>
-                    Select a model
-                  </option>
-                  {ENGAGEMENTS.map((e) => (
-                    <option key={e.title} value={e.title}>
-                      {e.title}
-                    </option>
-                  ))}
-                  <option value="Open to advice">Open to advice</option>
-                </select>
+                <label htmlFor="message">{pg.brief}</label>
+                <textarea id="message" name="message" required placeholder={pg.briefPlaceholder} />
               </div>
 
-              <div className="field">
-                <label htmlFor="message">Brief</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  placeholder="What are you trying to build, what exists today, and what is the deadline?"
-                />
-              </div>
-
-              <button type="submit" className="btn btn-accent" disabled={status === "sending"}>
-                {status === "sending" ? "Sending" : FORM_ENDPOINT ? "Send brief" : "Compose email"}{" "}
-                <ArrowRight />
+              <button type="submit" className="btn btn-primary btn-lg" disabled={status === "sending"}>
+                {status === "sending" ? pg.sending : FORM_ENDPOINT ? pg.send : pg.compose} <ArrowRight />
               </button>
 
-              <p className="form-note">
-                {FORM_ENDPOINT
-                  ? "Your details are used only to respond to this enquiry."
-                  : `This opens your email app with the brief filled in, addressed to ${COMPANY.email}.`}
-              </p>
+              <p className="form-note">{FORM_ENDPOINT ? pg.noteEndpoint : pg.noteMail(COMPANY.email)}</p>
             </form>
           </Reveal>
         </div>
       </section>
 
-      {/* ---------- WHAT HAPPENS NEXT ---------- */}
-      <section className="section alt">
+      <section className="section section-alt">
         <div className="wrap">
           <Reveal>
-            <div className="section-head">
-              <Label>What happens next</Label>
-              <h2 className="serif h2">Three steps, no sales process.</h2>
-            </div>
+            <SectionHead center eyebrow={pg.nextEyebrow} title={pg.nextTitle} accent={pg.nextAccent} />
           </Reveal>
-
-          <Reveal>
-            <div className="next-grid mt-56">
-              {NEXT_STEPS.map((s) => (
-                <div key={s.num} className="next-cell">
-                  <div className="next-n">{s.num}</div>
-                  <h3 className="serif h4">{s.title}</h3>
-                  <p className="body-sm" style={{ marginTop: 10 }}>
-                    {s.body}
-                  </p>
+          <div className="steps three">
+            {pg.nextSteps.map((s, i) => (
+              <Reveal key={s.num} delay={i * 70}>
+                <div className="step">
+                  <span className="step-num">{s.num}</span>
+                  <h3 className="h4">{s.title}</h3>
+                  <p className="body-sm">{s.body}</p>
                 </div>
-              ))}
-            </div>
-          </Reveal>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
     </>

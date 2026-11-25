@@ -36,7 +36,10 @@ export default function Seo({
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const fullTitle = `${title} | ${COMPANY.legalName}`;
+    // Brand first on the home page so the tab and search result read "Zedera ...";
+    // page name first elsewhere ("Services | Zedera Tech Solutions").
+    const fullTitle =
+      pathname === "/" ? `${COMPANY.legalName} | ${title}` : `${title} | ${COMPANY.legalName}`;
     const url = `${COMPANY.url}${pathname === "/" ? "" : pathname}`;
 
     document.title = fullTitle;
